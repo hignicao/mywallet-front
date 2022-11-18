@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Transaction from "../Transaction/Transaction";
+import { textColor } from "../../constants/colors";
 
 const mockData = [
 	{
@@ -29,6 +30,14 @@ const mockData = [
 ];
 
 export default function BalanceCard() {
+	if (mockData.length === 0) {
+		return (
+			<BalanceCardContainerEmpty>
+				<p>Não há registros de entrada ou saída</p>
+			</BalanceCardContainerEmpty>
+		);
+	}
+
 	return (
 		<BalanceCardContainer>
 			<Transactions>
@@ -44,8 +53,27 @@ export default function BalanceCard() {
 	);
 }
 
+const BalanceCardContainerEmpty = styled.div`
+	width: 100%;
+	height: 100%;
+	background-color: #ffffff;
+	border-radius: 5px;
+	padding: 25px 15px 15px 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	p {
+		width: 60%;
+		text-align: center;
+		font-weight: 400;
+		font-size: 20px;
+		line-height: 23px;
+		color: ${textColor};
+	}
+`;
+
 const BalanceCardContainer = styled.div`
-	position: relative;
 	width: 100%;
 	height: 100%;
 	background-color: #ffffff;
