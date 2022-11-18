@@ -1,7 +1,9 @@
+import NewTransaction from "../../components/NewTransaction/NewTransaction";
+
 export default function ExpensePage() {
-  return (
-    <>
-      Oi
-    </>
-  )
+	return (
+		<>
+			<NewTransaction balance={false}/>
+		</>
+	);
 }

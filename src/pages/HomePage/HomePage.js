@@ -2,18 +2,21 @@ import styled from "styled-components";
 import BalanceCard from "../../components/BalanceCard/BalanceCard";
 import Header from "../../components/Header/Header";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
+	const navigate = useNavigate();
+
 	return (
 		<HomePageContainer>
 			<Header />
 			<BalanceCard />
 			<InAndOut>
-				<button>
+				<button onClick={() => navigate("/entrada")}>
 					<AiOutlinePlusCircle />
 					<p>Nova entrada</p>
 				</button>
-				<button>
+				<button onClick={() => navigate("/saida")}>
 					<AiOutlineMinusCircle />
 					<p>Nova saída</p>
 				</button>

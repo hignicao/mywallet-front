@@ -1,7 +1,9 @@
+import NewTransaction from "../../components/NewTransaction/NewTransaction";
+
 export default function IncomePage() {
-  return (
-    <>
-      Oi
-    </>
-  )
+	return (
+		<>
+			<NewTransaction balance={true}/>
+		</>
+	);
 }
