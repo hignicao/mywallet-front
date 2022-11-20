@@ -5,10 +5,12 @@ import RegistrationPage from "./pages/RegistrationPage/RegistrationPage";
 import HomePage from "./pages/HomePage/HomePage";
 import IncomePage from "./pages/IncomePage/IncomePage";
 import ExpensePage from "./pages/ExpensePage/ExpensePage";
+import { UserProvider } from "./providers/UserData";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 	return (
-		<>
+		<UserProvider>
 			<GlobalStyle />
 			<BrowserRouter>
 				<Routes>
@@ -19,7 +21,8 @@ function App() {
 					<Route path="/saida" element={<ExpensePage />} />
 				</Routes>
 			</BrowserRouter>
-		</>
+			<ToastContainer />
+		</UserProvider>
 	);
 }
 

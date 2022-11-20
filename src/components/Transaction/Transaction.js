@@ -5,17 +5,17 @@ export default function Transaction({ transaction }) {
 	const { date, description, value, balance } = transaction;
 
 	return (
-		<DayElement balance={balance}>
+		<TransactionElement balance={balance}>
 			<div>
 				<p>{date}</p>
 				<p>{description}</p>
 			</div>
 			<p>{value.toFixed(2)}</p>
-		</DayElement>
+		</TransactionElement>
 	);
 }
 
-const DayElement = styled.div`
+const TransactionElement = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

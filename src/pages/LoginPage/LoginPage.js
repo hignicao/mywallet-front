@@ -1,34 +1,66 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/images/wallet.png";
+import { UserContext } from "../../providers/UserData";
+import { BASE_URL } from "../../constants/urls";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export default function LoginPage() {
+	const { userData, setUserData } = useContext(UserContext);
+	const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (userData) {
+			navigate("/home");
+		} else {
+			setUserData(undefined);
+		}
+	}, []);
+
+	function login(e) {
+		e.preventDefault();
+
+		axios
+			.post(`${BASE_URL}/signin`, loginForm)
+			.then((res) => {
+				localStorage.setItem("userData", JSON.stringify(res.data));
+				setUserData(res.data);
+				navigate("/home");
+			})
+			.catch((err) => {
+				console.log(err);
+				toast.error(err.response.data, {
+					position: "top-center",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "dark",
+				});
+			});
+	}
+
+	function changeFormData(e) {
+		const { name, value } = e.target;
+		setLoginForm({ ...loginForm, [name]: value });
+	}
+
 	return (
 		<LoginPageContainer>
 			<LogoContainer>
 				<img src={logo} alt="MyWallet logo" />
 				<h1>MyWallet</h1>
 			</LogoContainer>
-			<Form>
-				<input
-					required
-					// disabled={disabled}
-					name="email"
-					// value={loginForm.email}
-					type="email"
-					placeholder="E-mail"
-					// onChange={changeFormData}
-				/>
+			<Form onSubmit={login}>
+				<input required name="email" value={loginForm.email} type="email" placeholder="E-mail" onChange={changeFormData} />
 
-				<input
-					required
-					// disabled={disabled}
-					name="password"
-					// value={loginForm.password}
-					type="password"
-					placeholder="Senha"
-					// onChange={changeFormData}
-				/>
+				<input required name="password" value={loginForm.password} type="password" placeholder="Senha" onChange={changeFormData} />
 
 				<ButtonItem type="submit">Entrar</ButtonItem>
 			</Form>
