@@ -1,54 +1,68 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/images/wallet.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import { BASE_URL } from "../../constants/urls";
 
 export default function RegistrationPage() {
+	const [registerForm, setResgisterForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+	const navigate = useNavigate();
+
+	function register(e) {
+		e.preventDefault();
+
+		axios
+			.post(`${BASE_URL}/signup`, registerForm)
+			.then((res) => {
+				toast.success(`Cadastro criado com sucesso!`, {
+					position: "top-center",
+					autoClose: 2000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: false,
+					draggable: true,
+					progress: undefined,
+					theme: "dark",
+				});
+				navigate("/");
+			})
+			.catch((err) => {
+				console.log(err);
+				toast.error("Erro ao criar cadastro, por favor verifique as informações e tente novamente", {
+					position: "top-center",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "dark",
+				});
+			});
+	}
+
+	function changeFormData(e) {
+		const { name, value } = e.target;
+		setResgisterForm({ ...registerForm, [name]: value });
+	}
+
 	return (
 		<RegistrationPageContainer>
 			<LogoContainer>
 				<img src={logo} alt="MyWallet logo" />
 				<h1>MyWallet</h1>
 			</LogoContainer>
-			<Form>
-				<input
-					required
-					// disabled={disabled}
-					name="name"
-					// value={registerForm.email}
-					type="text"
-					placeholder="Nome"
-					// onChange={changeFormData}
-				/>
+			<Form onSubmit={register}>
+				<input required name="name" value={registerForm.name} type="text" placeholder="Nome" onChange={changeFormData} />
 
-				<input
-					required
-					// disabled={disabled}
-					name="email"
-					// value={registerForm.password}
-					type="email"
-					placeholder="E-mail"
-					// onChange={changeFormData}
-				/>
+				<input required name="email" value={registerForm.email} type="email" placeholder="E-mail" onChange={changeFormData} />
 
-				<input
-					required
-					// disabled={disabled}
-					name="password"
-					// value={registerForm.name}
-					type="password"
-					placeholder="Senha"
-					// onChange={changeFormData}
-				/>
+				<input required name="password" value={registerForm.password} type="password" placeholder="Senha" onChange={changeFormData} />
 
-				<input
-					required
-					// disabled={disabled}
-					name="confirmPassword"
-					// value={registerForm.image}
-					type="password"
-					placeholder="Confirme a senha"
-					// onChange={changeFormData}
-				/>
+				<input required name="confirmPassword" value={registerForm.confirmPassword} type="password" placeholder="Confirme a senha" onChange={changeFormData} />
 
 				<ButtonItem type="submit">Cadastrar</ButtonItem>
 			</Form>
