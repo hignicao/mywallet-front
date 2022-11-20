@@ -1,17 +1,29 @@
 import styled from "styled-components";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../providers/UserData";
 
 export default function Header() {
+	const { userData, setUserData } = useContext(UserContext);
+	const navigate = useNavigate();
+
+	function handleLogout() {
+		localStorage.removeItem("userData");
+		setUserData(undefined);
+		navigate("/");
+	}
+
 	return (
 		<HeaderContainer>
-			<p>Olá, Fulano</p>
-			<LogoutButton onClick={() => alert("Logout")}></LogoutButton>
+			<p>Olá, {userData.name}</p>
+			<LogoutButton onClick={handleLogout}></LogoutButton>
 		</HeaderContainer>
 	);
 }
 
 const HeaderContainer = styled.div`
-  width: 100%;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
