@@ -12,11 +12,11 @@ export default function HomePage() {
 			<Header />
 			<BalanceCard />
 			<InAndOut>
-				<button onClick={() => navigate("/entrada")}>
+				<button onClick={() => navigate("/novatransacao/entrada")}>
 					<AiOutlinePlusCircle />
 					<p>Nova entrada</p>
 				</button>
-				<button onClick={() => navigate("/saida")}>
+				<button onClick={() => navigate("/novatransacao/saida")}>
 					<AiOutlineMinusCircle />
 					<p>Nova saída</p>
 				</button>

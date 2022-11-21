@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { TbArrowBackUp } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../../providers/UserData";
 import axios from "axios";
 import { BASE_URL } from "../../constants/urls";
 import { toast } from "react-toastify";
 
-export default function NewTransaction({ balance }) {
+export default function NewTransactionPage() {
+	const { balance } = useParams();
 	const { userData } = useContext(UserContext);
 	const [transactionForm, setTransactionForm] = useState({ value: "", description: "" });
 	const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function NewTransaction({ balance }) {
 		const body = {
 			description: transactionForm.description,
 			value: transactionForm.value,
-			balance,
+			balance: balance === "entrada" ? true : false,
 		};
 
 		axios
@@ -39,7 +40,7 @@ export default function NewTransaction({ balance }) {
 			})
 			.catch((err) => {
 				console.log(err);
-				toast.error(`Erro ao salvar ${balance ? "entrada" : "saida"}, tente novamente!`, {
+				toast.error(`Erro ao salvar ${balance}, tente novamente!`, {
 					position: "top-center",
 					autoClose: 3000,
 					hideProgressBar: false,
@@ -55,7 +56,7 @@ export default function NewTransaction({ balance }) {
 	return (
 		<NewTransactionContainer>
 			<HeaderContainer>
-				<h2>Nova {balance ? "entrada" : "saida"}</h2>
+				<h2>Nova {balance}</h2>
 				<BackButton onClick={() => navigate(-1)}></BackButton>
 			</HeaderContainer>
 			<Form onSubmit={submitTransaction}>
@@ -77,7 +78,7 @@ export default function NewTransaction({ balance }) {
 					onChange={changeFormData}
 				/>
 
-				<ButtonItem type="submit">Salvar {balance ? "entrada" : "saida"}</ButtonItem>
+				<ButtonItem type="submit">Salvar {balance}</ButtonItem>
 			</Form>
 		</NewTransactionContainer>
 	);
