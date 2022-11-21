@@ -7,11 +7,22 @@ import { UserContext } from "../../providers/UserData";
 import { BASE_URL } from "../../constants/urls";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import { ThreeDots } from  'react-loader-spinner'
+
 
 export default function LoginPage() {
 	const { userData, setUserData } = useContext(UserContext);
 	const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+	const [disabled, setDisabled] = useState(false);
 	const navigate = useNavigate();
+	const loader =
+	<ThreeDots
+		type="Puff"
+		color="#FFFFFF"
+		height={23}
+		width={46}
+		timeout={2000}
+  />
 
 	useEffect(() => {
 		if (userData) {
@@ -23,6 +34,8 @@ export default function LoginPage() {
 
 	function login(e) {
 		e.preventDefault();
+
+		setDisabled(true)
 
 		axios
 			.post(`${BASE_URL}/signin`, loginForm)
@@ -43,6 +56,7 @@ export default function LoginPage() {
 					progress: undefined,
 					theme: "light",
 				});
+				setDisabled(false)
 			});
 	}
 
@@ -58,11 +72,27 @@ export default function LoginPage() {
 				<h1>MyWallet</h1>
 			</LogoContainer>
 			<Form onSubmit={login}>
-				<input required name="email" value={loginForm.email} type="email" placeholder="E-mail" onChange={changeFormData} />
+				<input
+					required
+					disabled={disabled}
+					name="email"
+					value={loginForm.email}
+					type="email"
+					placeholder="E-mail"
+					onChange={changeFormData}
+				/>
 
-				<input required name="password" value={loginForm.password} type="password" placeholder="Senha" onChange={changeFormData} />
+				<input
+					required
+					disabled={disabled}
+					name="password"
+					value={loginForm.password}
+					type="password"
+					placeholder="Senha"
+					onChange={changeFormData}
+				/>
 
-				<ButtonItem type="submit">Entrar</ButtonItem>
+				<ButtonItem disabled={disabled} type="submit">{(disabled ? loader : "Entrar")}</ButtonItem>
 			</Form>
 			<LinkText data-identifier="sign-up-action" to={"/cadastro"}>
 				Primeira vez? Cadastre-se!

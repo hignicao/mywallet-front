@@ -6,12 +6,22 @@ import { UserContext } from "../../providers/UserData";
 import axios from "axios";
 import { BASE_URL } from "../../constants/urls";
 import { toast } from "react-toastify";
+import { ThreeDots } from  'react-loader-spinner'
 
 export default function NewTransactionPage() {
 	const { balance } = useParams();
 	const { userData } = useContext(UserContext);
 	const [transactionForm, setTransactionForm] = useState({ value: "", description: "" });
+	const [disabled, setDisabled] = useState(false)
 	const navigate = useNavigate();
+	const loader =
+	<ThreeDots
+		type="Puff"
+		color="#FFFFFF"
+		height={23}
+		width={46}
+		timeout={2000}
+  />
 
 	function changeFormData(e) {
 		const { name, value } = e.target;
@@ -20,6 +30,8 @@ export default function NewTransactionPage() {
 
 	function submitTransaction(e) {
 		e.preventDefault();
+
+		setDisabled(true)
 
 		const config = {
 			headers: {
@@ -50,6 +62,7 @@ export default function NewTransactionPage() {
 					progress: undefined,
 					theme: "light",
 				});
+				setDisabled(false)
 			});
 	}
 
@@ -62,6 +75,7 @@ export default function NewTransactionPage() {
 			<Form onSubmit={submitTransaction}>
 				<input
 					required
+					disabled={disabled}
 					name="value"
 					value={transactionForm.value}
 					type="number"
@@ -71,6 +85,7 @@ export default function NewTransactionPage() {
 
 				<input
 					required
+					disabled={disabled}
 					name="description"
 					value={transactionForm.description}
 					type="text"
@@ -78,7 +93,7 @@ export default function NewTransactionPage() {
 					onChange={changeFormData}
 				/>
 
-				<ButtonItem type="submit">Salvar {balance}</ButtonItem>
+				<ButtonItem	disabled={disabled} type="submit">{(disabled ? loader : `Salvar ${balance}`)}</ButtonItem>
 			</Form>
 		</NewTransactionContainer>
 	);

@@ -6,13 +6,25 @@ import logo from "../../assets/images/wallet.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { BASE_URL } from "../../constants/urls";
+import { ThreeDots } from  'react-loader-spinner'
 
 export default function RegistrationPage() {
 	const [registerForm, setResgisterForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+	const [disabled, setDisabled] = useState(false)
 	const navigate = useNavigate();
+	const loader =
+	<ThreeDots
+		type="Puff"
+		color="#FFFFFF"
+		height={23}
+		width={46}
+		timeout={2000}
+  />
 
 	function register(e) {
 		e.preventDefault();
+
+		setDisabled(true)
 
 		axios
 			.post(`${BASE_URL}/signup`, registerForm)
@@ -41,6 +53,7 @@ export default function RegistrationPage() {
 					progress: undefined,
 					theme: "light",
 				});
+				setDisabled(false)
 			});
 	}
 
@@ -56,15 +69,47 @@ export default function RegistrationPage() {
 				<h1>MyWallet</h1>
 			</LogoContainer>
 			<Form onSubmit={register}>
-				<input required name="name" value={registerForm.name} type="text" placeholder="Nome" onChange={changeFormData} />
+				<input
+					required
+					disabled={disabled}
+					name="name"
+					value={registerForm.name}
+					type="text"
+					placeholder="Nome"
+					onChange={changeFormData}
+				/>
 
-				<input required name="email" value={registerForm.email} type="email" placeholder="E-mail" onChange={changeFormData} />
+				<input
+					required
+					disabled={disabled}
+					name="email"
+					value={registerForm.email}
+					type="email"
+					placeholder="E-mail"
+					onChange={changeFormData}
+				/>
 
-				<input required name="password" value={registerForm.password} type="password" placeholder="Senha" onChange={changeFormData} />
+				<input
+					required
+					disabled={disabled}
+					name="password"
+					value={registerForm.password}
+					type="password"
+					placeholder="Senha"
+					onChange={changeFormData}
+				/>
 
-				<input required name="confirmPassword" value={registerForm.confirmPassword} type="password" placeholder="Confirme a senha" onChange={changeFormData} />
+				<input
+					required
+					disabled={disabled}
+					name="confirmPassword"
+					value={registerForm.confirmPassword}
+					type="password"
+					placeholder="Confirme a senha"
+					onChange={changeFormData}
+				/>
 
-				<ButtonItem type="submit">Cadastrar</ButtonItem>
+				<ButtonItem disabled={disabled} type="submit">{(disabled ? loader : "Cadastrar")}</ButtonItem>
 			</Form>
 			<LinkText to={"/"}>Já tem uma conta? Faça login!</LinkText>
 		</RegistrationPageContainer>

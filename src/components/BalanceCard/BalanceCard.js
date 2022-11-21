@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import Transaction from "../Transaction/Transaction";
-import { expenseColor, incomingColor, textColor } from "../../constants/colors";
+import { accentColor, baseColor, expenseColor, incomingColor, textColor } from "../../constants/colors";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../providers/UserData";
 import axios from "axios";
 import { BASE_URL } from "../../constants/urls";
 import { toast } from "react-toastify";
+import { ColorRing } from "react-loader-spinner";
 
 export default function BalanceCard() {
 	const { userData } = useContext(UserContext);
-	const [transactions, setTransactions] = useState([]);
+	const [transactions, setTransactions] = useState(undefined);
 	const [balance, setBalance] = useState(0);
 
 	function calcBalance(transactions) {
@@ -46,6 +47,23 @@ export default function BalanceCard() {
 				});
 			});
 	}, [userData.token]);
+
+	if(transactions === undefined) {
+		return (
+			<BalanceCardContainerEmpty>
+				<ColorRing
+					visible={true}
+					height="150"
+					width="150"
+					ariaLabel="blocks-loading"
+					wrapperStyle={{}}
+					wrapperClass="blocks-wrapper"
+					colors={[accentColor, baseColor, accentColor, baseColor, accentColor]}
+				/>
+				<p>Carregando...</p>
+			</BalanceCardContainerEmpty>
+		);
+	}
 
 	if (transactions.length === 0) {
 		return (
