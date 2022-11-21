@@ -26,7 +26,7 @@ export default function HomePage() {
 }
 
 const HomePageContainer = styled.div`
-	padding: 25px;
+	padding: 20px;
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -56,5 +56,8 @@ const InAndOut = styled.div`
 			width: 30%;
 			font-size: 17px;
 		}
+	}
+	@media (min-width: 808px) {
+		width: 768px;
 	}
 `;

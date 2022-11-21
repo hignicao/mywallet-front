@@ -106,14 +106,16 @@ const BalanceCardContainerEmpty = styled.div`
 		line-height: 23px;
 		color: ${textColor};
 	}
+	@media (min-width: 808px) {
+		width: 768px;
+	}
 `;
 
 const BalanceCardContainer = styled.div`
 	width: 100%;
-	height: 100%;
 	background-color: #ffffff;
 	border-radius: 5px;
-	padding: 25px 15px 15px 15px;
+	padding: 20px 15px 15px 15px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -124,9 +126,13 @@ const BalanceCardContainer = styled.div`
 	::-webkit-scrollbar {
 		display: none;
 	}
+	@media (min-width: 808px) {
+		width: 768px;
+	}
 `;
 
 const Total = styled.div`
+	height: 15px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -143,4 +149,5 @@ const Transactions = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
+	overflow: scroll;
 `;

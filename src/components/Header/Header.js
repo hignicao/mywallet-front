@@ -33,6 +33,9 @@ const HeaderContainer = styled.div`
 		line-height: 31px;
 		color: #ffffff;
 	}
+	@media (min-width: 808px) {
+		width: 768px;
+	}
 `;
 
 const LogoutButton = styled(RiLogoutBoxRLine)`

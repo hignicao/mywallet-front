@@ -101,7 +101,7 @@ export default function NewTransactionPage() {
 
 const NewTransactionContainer = styled.div`
 	height: 100vh;
-	padding: 25px;
+	padding: 20px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -120,6 +120,9 @@ const HeaderContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	@media (min-width: 808px) {
+		width: 768px;
+	}
 `;
 
 const BackButton = styled(TbArrowBackUp)`
@@ -132,6 +135,9 @@ const Form = styled.form`
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+	@media (min-width: 808px) {
+		width: 768px;
+	}
 `;
 
 const ButtonItem = styled.button`
