@@ -1,36 +1,53 @@
 import styled from "styled-components";
 import Transaction from "../Transaction/Transaction";
-import { textColor } from "../../constants/colors";
-
-const mockData = [
-	{
-		date: "30/11",
-		description: "Almoço mãe",
-		value: 39.9,
-		balance: false,
-	},
-	{
-		date: "27/11",
-		description: "Mercado",
-		value: 423.9,
-		balance: false,
-	},
-	{
-		date: "26/11",
-		description: "Compras churrasco",
-		value: 89.9,
-		balance: false,
-	},
-	{
-		date: "15/11",
-		description: "Salário",
-		value: 1230.9,
-		balance: true,
-	},
-];
+import { expenseColor, incomingColor, textColor } from "../../constants/colors";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../providers/UserData";
+import axios from "axios";
+import { BASE_URL } from "../../constants/urls";
+import { toast } from "react-toastify";
 
 export default function BalanceCard() {
-	if (mockData.length === 0) {
+	const { userData } = useContext(UserContext);
+	const [transactions, setTransactions] = useState([]);
+	const [balance, setBalance] = useState(0);
+
+	function calcBalance(transactions) {
+		const incomes = transactions.filter((transaction) => transaction.balance === true);
+		const expenses = transactions.filter((transaction) => transaction.balance === false);
+		const incomesSum = incomes.reduce((acc, curr) => acc + curr.value, 0);
+		const expensesSum = expenses.reduce((acc, curr) => acc + curr.value, 0);
+		setBalance(incomesSum - expensesSum);
+	}
+
+	useEffect(() => {
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userData.token}`,
+			},
+		};
+
+		axios
+			.get(`${BASE_URL}/balance`, config)
+			.then((res) => {
+				setTransactions(res.data);
+				calcBalance(res.data);
+			})
+			.catch((err) => {
+				toast.error("Erro ao carregar hábitos, tente novamente!", {
+					position: "top-center",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "light",
+				});
+			});
+	}, [userData.token]);
+
+	if (transactions.length === 0) {
 		return (
 			<BalanceCardContainerEmpty>
 				<p>Não há registros de entrada ou saída</p>
@@ -41,13 +58,13 @@ export default function BalanceCard() {
 	return (
 		<BalanceCardContainer>
 			<Transactions>
-				{mockData.map((t, i) => (
+				{transactions.map((t, i) => (
 					<Transaction transaction={t} key={i} />
 				))}
 			</Transactions>
-			<Total>
+			<Total balance={balance}>
 				<p>SALDO</p>
-				<p>233.90</p>
+				<p>{balance.toFixed(2)}</p>
 			</Total>
 		</BalanceCardContainer>
 	);
@@ -97,6 +114,10 @@ const Total = styled.div`
 	justify-content: space-between;
 	p:nth-child(1) {
 		font-weight: 700;
+	}
+	p:nth-child(2) {
+		font-weight: 500;
+		color: ${({ balance }) => (balance >= 0 ? incomingColor : expenseColor)};
 	}
 `;
 

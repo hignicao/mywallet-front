@@ -1,9 +1,56 @@
 import styled from "styled-components";
 import { TbArrowBackUp } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { UserContext } from "../../providers/UserData";
+import axios from "axios";
+import { BASE_URL } from "../../constants/urls";
+import { toast } from "react-toastify";
 
 export default function NewTransaction({ balance }) {
+	const { userData } = useContext(UserContext);
+	const [transactionForm, setTransactionForm] = useState({ value: "", description: "" });
 	const navigate = useNavigate();
+
+	function changeFormData(e) {
+		const { name, value } = e.target;
+		setTransactionForm({ ...transactionForm, [name]: value });
+	}
+
+	function submitTransaction(e) {
+		e.preventDefault();
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userData.token}`,
+			},
+		};
+
+		const body = {
+			description: transactionForm.description,
+			value: transactionForm.value,
+			balance,
+		};
+
+		axios
+			.post(`${BASE_URL}/newtransaction`, body, config)
+			.then((res) => {
+				navigate("/home");
+			})
+			.catch((err) => {
+				console.log(err);
+				toast.error(`Erro ao salvar ${balance ? "entrada" : "saida"}, tente novamente!`, {
+					position: "top-center",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "light",
+				});
+			});
+	}
 
 	return (
 		<NewTransactionContainer>
@@ -11,25 +58,23 @@ export default function NewTransaction({ balance }) {
 				<h2>Nova {balance ? "entrada" : "saida"}</h2>
 				<BackButton onClick={() => navigate(-1)}></BackButton>
 			</HeaderContainer>
-			<Form>
+			<Form onSubmit={submitTransaction}>
 				<input
 					required
-					// disabled={disabled}
 					name="value"
-					// value={loginForm.email}
+					value={transactionForm.value}
 					type="number"
 					placeholder="Valor"
-					// onChange={changeFormData}
+					onChange={changeFormData}
 				/>
 
 				<input
 					required
-					// disabled={disabled}
 					name="description"
-					// value={loginForm.password}
+					value={transactionForm.description}
 					type="text"
 					placeholder="Descrição"
-					// onChange={changeFormData}
+					onChange={changeFormData}
 				/>
 
 				<ButtonItem type="submit">Salvar {balance ? "entrada" : "saida"}</ButtonItem>

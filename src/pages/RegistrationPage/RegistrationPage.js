@@ -25,7 +25,7 @@ export default function RegistrationPage() {
 					pauseOnHover: false,
 					draggable: true,
 					progress: undefined,
-					theme: "dark",
+					theme: "light",
 				});
 				navigate("/");
 			})
@@ -39,7 +39,7 @@ export default function RegistrationPage() {
 					pauseOnHover: true,
 					draggable: true,
 					progress: undefined,
-					theme: "dark",
+					theme: "light",
 				});
 			});
 	}
